@@ -27,7 +27,7 @@ const updateUserToConversation = async (message: {
   const userData = await getUserData(message.id_user, message.id_user_to);
   const roomGenerated = createRoom(message.id_user, message.id_user_to);
   if(roomGenerated !== message.room) {
-    return;
+    throw new Error('Room generated are different from room message')    
   }
   await Conversation.findOneAndUpdate(
     {
