@@ -9,6 +9,14 @@ import Message from "../models/message.model";
 import { TypeMessage } from "../types/type-message.enum";
 import pick from "../utils/pick";
 
+const createRoom = (user1: number, user2: number) => {
+  if (user1 > user2) {
+    return `chat${user1}_${user2}`;
+  } else {
+    return `chat${user2}_${user1}`;
+  }
+};
+
 const updateUserToConversation = async (message: {
   room: string;
   id_user_to: number;
@@ -17,6 +25,10 @@ const updateUserToConversation = async (message: {
   message: string;
 }) => {
   const userData = await getUserData(message.id_user, message.id_user_to);
+  const roomGenerated = createRoom(message.id_user, message.id_user_to);
+  if(roomGenerated !== message.room) {
+    return;
+  }
   await Conversation.findOneAndUpdate(
     {
       room: message.room,
@@ -73,14 +85,6 @@ const getUserData = async (id_user: number, id_user_to: number) => {
     }
   );
   return userData.data;
-};
-
-const createRoom = (user1: number, user2: number) => {
-  if (user1 > user2) {
-    return `chat${user1}_${user2}`;
-  } else {
-    return `chat${user2}_${user1}`;
-  }
 };
 
 export const loadApiEndpoints = (app: Application): void => {
