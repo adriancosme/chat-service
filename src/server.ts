@@ -8,8 +8,7 @@ import config from "./config/config";
  * Start Express server.
  */
 let server!: Server;
-if (config.env !== "test") {
-  console.log(config.mongoose.url);
+if (config.env !== "test") {  
   mongoose
     .connect(config.mongoose.url, { authSource: "admin" })
     .then(() => {
